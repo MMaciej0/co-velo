@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 import Link from 'next/link';
 
 import ToggleThemeButton from './ToggleThemeButton';
-import MaxWidthWrapper from '../MaxWidthWrapper';
-import { buttonVariants } from '../ui/button';
-import { Separator } from '../ui/separator';
+import MaxWidthWrapper from '../../../components/MaxWidthWrapper';
+import { buttonVariants } from '../../../components/ui/button';
+import { Separator } from '../../../components/ui/separator';
 import { cn } from '@/lib/utils';
 
 interface NavbarProps {}

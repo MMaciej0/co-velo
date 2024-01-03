@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button } from '../ui/button';
+import { Button } from '../../../components/ui/button';
 import { SunMoon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 

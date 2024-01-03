@@ -4,7 +4,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import Providers from '@/providers/Providers';
 
-import Navbar from '@/components/navbar/Navbar';
+import Navbar from '@/app/_components/navbar/Navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
