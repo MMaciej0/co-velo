@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
+import Providers from '@/providers/Providers';
 
 import Navbar from '@/components/navbar/Navbar';
 
@@ -25,10 +26,16 @@ export default function RootLayout({
           inter.className
         )}
       >
-        <main className="flex flex-col min-h-screen relative">
-          <Navbar />
-          <div className="flex-grow flex-1">{children}</div>
-        </main>
+        <Providers
+          attribute="class"
+          defaultTheme="dark"
+          disableTransitionOnChange
+        >
+          <main className="flex flex-col min-h-screen relative">
+            <Navbar />
+            <div className="flex-grow flex-1">{children}</div>
+          </main>
+        </Providers>
       </body>
     </html>
   );
