@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String        @id @default(auto()) @map("_id") @db.ObjectId
+  name                  String?
+  email                 String?       @unique
+  emailVerified         DateTime?
+  image                 String?
+  hashedPassword        String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  favoriteIds           String[]      @db.ObjectId
+  accounts              Account[]
+  ListingsAsOwner       Listing[]
+  ListingsAsParticipant Participant[]
+  ListingsMessages      Message[]
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Listing {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  country            String
+  city               String
+  postalCode         String?
+  street             String?
+  startDate          DateTime
+  departure          String
+  meetingDescription String
+  bikeType           String
+  rideType           String
+  pace               String?
+  route              String?
+  description        String?
+  createdAt          DateTime @default(now())
+  distance           Int
+
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId String @db.ObjectId
+
+  meetingPoint MeetingPoint?
+
+  participants Participant[]
+  messages     Message[]
+}
+
+model Participant {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  listing   Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listingId String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.ObjectId
+
+  @@unique([listingId, userId])
+}
+
+model MeetingPoint {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  lat       Float
+  lng       Float
+  listing   Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listingId String   @unique @db.ObjectId
+}
+
+model Message {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listingId String  @db.ObjectId
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String  @db.ObjectId
+}
