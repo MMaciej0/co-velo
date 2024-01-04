@@ -1,8 +1,7 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -12,7 +11,6 @@ import {
 
 import { FaGoogle } from 'react-icons/fa';
 import FormWrapper from '@/components/FromWrapper';
-import { useToast } from '@/components/ui/use-toast';
 import {
   Form,
   FormControl,
@@ -26,11 +24,11 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/Heading';
 import { register } from '@/actions/register';
+import FormError from '@/components/FormError';
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  const { toast } = useToast();
+  const [submitError, setSubmitError] = useState<string | undefined>('');
   const form = useForm<TRegisterSchema>({
     defaultValues: {
       username: '',
@@ -41,34 +39,13 @@ const RegisterForm = () => {
   });
 
   const onSubmit: SubmitHandler<TRegisterSchema> = (data) => {
+    setSubmitError('');
     startTransition(async () => {
-      try {
-        const result = await register(data);
-        if (result?.errors) {
-          const error = result.errors;
-          if (error.username) {
-            form.setError('username', {
-              type: 'server',
-              message: error.username,
-            });
-          } else if (error.email) {
-            form.setError('email', {
-              type: 'server',
-              message: error.email,
-            });
-          } else if (error.password) {
-            form.setError('password', {
-              type: 'server',
-              message: error.password,
-            });
-          }
+      register(data).then((callback) => {
+        if (callback.error) {
+          setSubmitError(callback?.error);
         }
-      } catch (error) {
-        toast({
-          title: 'Something went wrong.',
-          variant: 'destructive',
-        });
-      }
+      });
     });
   };
 
@@ -133,6 +110,7 @@ const RegisterForm = () => {
             )}
           />
           <div className="flex flex-col space-y-4 pt-4">
+            <FormError message={submitError} />
             <Button type="submit" disabled={isPending}>
               Register
             </Button>

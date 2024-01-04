@@ -2,14 +2,12 @@
 
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type TLoginSchema, loginSchema } from '@/lib/validators/loginSchema';
 
 import { FaGoogle } from 'react-icons/fa';
 import FormWrapper from '@/components/FromWrapper';
-import { useToast } from '@/components/ui/use-toast';
 import {
   Form,
   FormControl,
@@ -28,8 +26,6 @@ import FormError from '@/components/FormError';
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
   const [submitError, setSubmitError] = useState<string | undefined>('');
-  const router = useRouter();
-  const { toast } = useToast();
   const form = useForm<TLoginSchema>({
     defaultValues: {
       email: '',
