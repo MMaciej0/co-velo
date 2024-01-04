@@ -25,6 +25,7 @@ import { Input } from '@/components/ui/input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/Heading';
+import { register } from '@/actions/register';
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -39,9 +40,35 @@ const RegisterForm = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit: SubmitHandler<TRegisterSchema> = async (data) => {
-    startTransition(() => {
-      console.log(data);
+  const onSubmit: SubmitHandler<TRegisterSchema> = (data) => {
+    startTransition(async () => {
+      try {
+        const result = await register(data);
+        if (result?.errors) {
+          const error = result.errors;
+          if (error.username) {
+            form.setError('username', {
+              type: 'server',
+              message: error.username,
+            });
+          } else if (error.email) {
+            form.setError('email', {
+              type: 'server',
+              message: error.email,
+            });
+          } else if (error.password) {
+            form.setError('password', {
+              type: 'server',
+              message: error.password,
+            });
+          }
+        }
+      } catch (error) {
+        toast({
+          title: 'Something went wrong.',
+          variant: 'destructive',
+        });
+      }
     });
   };
 
@@ -117,7 +144,7 @@ const RegisterForm = () => {
               disabled={isPending}
             >
               <FaGoogle size={15} className="absolute left-8" />
-              Login with Google
+              Register with Google
             </Button>
             <Link className={buttonVariants({ variant: 'link' })} href="/login">
               Already have an account? Sign in.
