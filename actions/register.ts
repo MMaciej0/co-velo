@@ -1,7 +1,7 @@
 'use server';
 
-import bcrypt from 'bcrypt';
-import prisma from '@/lib/db';
+import bcrypt from 'bcryptjs';
+import prisma from '@/lib/prisma';
 import {
   TRegisterSchema,
   registerSchema,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -22,9 +22,12 @@ import { Input } from '@/components/ui/input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/Heading';
+import { login } from '@/actions/login';
+import FormError from '@/components/FormError';
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
+  const [submitError, setSubmitError] = useState<string | undefined>('');
   const router = useRouter();
   const { toast } = useToast();
   const form = useForm<TLoginSchema>({
@@ -35,9 +38,14 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit: SubmitHandler<TLoginSchema> = async (data) => {
+  const onSubmit: SubmitHandler<TLoginSchema> = (data) => {
+    setSubmitError('');
     startTransition(() => {
-      console.log(data);
+      login(data).then((callback) => {
+        if (callback?.error) {
+          setSubmitError(callback.error);
+        }
+      });
     });
   };
 
@@ -88,6 +96,7 @@ const LoginForm = () => {
               Login
             </Button>
             <Separator />
+            <FormError message={submitError} />
             <Button
               variant="outline"
               className="relative font-semibold"
