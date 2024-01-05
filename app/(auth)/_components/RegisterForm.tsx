@@ -2,12 +2,14 @@
 
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   TRegisterSchema,
   registerSchema,
 } from '@/lib/validators/registerSchema';
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 import { FaGoogle } from 'react-icons/fa';
 import FormWrapper from '@/components/FromWrapper';
@@ -120,6 +122,9 @@ const RegisterForm = () => {
               className="relative font-semibold"
               type="button"
               disabled={isPending}
+              onClick={() =>
+                signIn('google', { callbackUrl: DEFAULT_LOGIN_REDIRECT })
+              }
             >
               <FaGoogle size={15} className="absolute left-8" />
               Register with Google

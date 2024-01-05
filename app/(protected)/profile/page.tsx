@@ -9,13 +9,14 @@ const UserProfilePage = async () => {
     <div className="pt-36">
       <Heading heading={`Hello ${session?.user?.name}`} />
       <form
-        className="flex justify-center space-y-10"
+        className="flex flex-col items-center space-y-10"
         action={async () => {
           'use server';
 
           await signOut();
         }}
       >
+        <p>{session?.user?.id}</p>
         <Button type="submit">Log out</Button>
       </form>
     </div>

@@ -3,8 +3,10 @@
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { signIn } from 'next-auth/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type TLoginSchema, loginSchema } from '@/lib/validators/loginSchema';
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 import { FaGoogle } from 'react-icons/fa';
 import FormWrapper from '@/components/FromWrapper';
@@ -98,6 +100,9 @@ const LoginForm = () => {
               className="relative font-semibold"
               type="button"
               disabled={isPending}
+              onClick={() =>
+                signIn('google', { callbackUrl: DEFAULT_LOGIN_REDIRECT })
+              }
             >
               <FaGoogle size={15} className="absolute left-8" />
               Login with Google
