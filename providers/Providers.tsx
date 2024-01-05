@@ -3,12 +3,21 @@
 import { ReactNode } from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { ThemeProviderProps } from 'next-themes/dist/types';
+import { SessionProvider, SessionProviderProps } from 'next-auth/react';
 
 const Providers = ({
+  session,
   children,
   ...props
-}: { children: ReactNode } & ThemeProviderProps) => {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+}: {
+  session: SessionProviderProps['session'];
+  children: ReactNode;
+} & ThemeProviderProps) => {
+  return (
+    <SessionProvider session={session}>
+      <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+    </SessionProvider>
+  );
 };
 
 export default Providers;

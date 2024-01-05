@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import Providers from '@/providers/Providers';
+import { auth } from '@/auth';
 
 import Navbar from '@/app/_components/navbar/Navbar';
 import { Toaster } from '@/components/ui/toaster';
@@ -14,11 +15,12 @@ export const metadata: Metadata = {
   description: 'Better way of cycling.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
   return (
     <html lang="en">
       <body
@@ -28,6 +30,7 @@ export default function RootLayout({
         )}
       >
         <Providers
+          session={session}
           attribute="class"
           defaultTheme="dark"
           disableTransitionOnChange

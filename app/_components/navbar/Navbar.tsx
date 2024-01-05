@@ -1,16 +1,18 @@
 import React, { FC } from 'react';
 import Link from 'next/link';
-
-import ToggleThemeButton from './ToggleThemeButton';
-import MaxWidthWrapper from '../../../components/MaxWidthWrapper';
-import { buttonVariants } from '../../../components/ui/button';
-import { Separator } from '../../../components/ui/separator';
+import { auth } from '@/auth';
 import { cn } from '@/lib/utils';
+
+import ToggleThemeButton from '@/app/_components/navbar/ToggleThemeButton';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import { buttonVariants } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import UserMenu from '@/app/_components/navbar/UserMenu';
 
 interface NavbarProps {}
 
-const Navbar: FC<NavbarProps> = ({}) => {
-  const user = null;
+const Navbar: FC<NavbarProps> = async ({}) => {
+  const session = await auth();
 
   return (
     <div className="fixed top-0 inset-x-0 bg-background z-50">
@@ -26,8 +28,8 @@ const Navbar: FC<NavbarProps> = ({}) => {
               </Link>
             </div>
             <div className="flex items-center">
-              {user ? (
-                <div>usermenu</div>
+              {session?.user ? (
+                <UserMenu />
               ) : (
                 <>
                   <Link

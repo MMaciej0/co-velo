@@ -13,7 +13,7 @@ const ToggleThemeButton = () => {
   };
 
   return (
-    <Button variant="ghost" onClick={changeTheme} className="px-1 md:px-4">
+    <Button variant="ghost" onClick={changeTheme} size="icon">
       <SunMoon />
     </Button>
   );
