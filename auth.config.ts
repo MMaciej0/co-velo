@@ -5,12 +5,13 @@ import bcrypt from 'bcryptjs';
 import type { NextAuthConfig } from 'next-auth';
 import { loginSchema } from './lib/validators/loginSchema';
 import { getUserByEmail } from './lib/database/user';
+import { env } from './lib/validators/env';
 
 export default {
   providers: [
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      clientId: env.AUTH_GOOGLE_ID,
+      clientSecret: env.AUTH_GOOGLE_SECRET,
     }),
     Credentials({
       async authorize(credentials) {

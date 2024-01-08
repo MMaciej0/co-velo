@@ -1,0 +1,133 @@
+'use client';
+
+import React, { FC, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { TCreateSchema, createSchema } from '@/lib/validators/createSchema';
+import { TCountry } from '@/lib/validators/countrySchema';
+import { cn } from '@/lib/utils';
+
+import LocationStep from './LocationStep';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Form } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
+import FormWrapper from '@/components/FromWrapper';
+import FormError from '@/components/FormError';
+
+const steps = [
+  {
+    id: 1,
+    name: 'Location',
+    fields: ['city', 'country', 'street', 'postalCode'],
+  },
+  { id: 2, name: 'Departure', fields: ['departure'] },
+  { id: 3, name: 'Map', fields: ['map'] },
+  { id: 4, name: 'Ride type', fields: ['type'] },
+  { id: 5, name: 'Ride description', fields: ['description'] },
+];
+
+type TFields = keyof TCreateSchema;
+
+interface CreateFormProps {
+  countries: TCountry[];
+}
+
+const CreateForm: FC<CreateFormProps> = ({ countries }) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [customError, setCustomError] = useState('');
+  const form = useForm<TCreateSchema>({
+    defaultValues: {
+      country: '',
+      city: '',
+      street: '',
+      postalCode: '',
+      coords: {
+        lat: '',
+        lon: '',
+      },
+    },
+    resolver: zodResolver(createSchema),
+  });
+
+  const onNext = async () => {
+    const fieldsToValidate = steps[currentStep].fields as TFields[];
+    const validatedVields = await form.trigger(fieldsToValidate, {
+      shouldFocus: true,
+    });
+    if (validatedVields && !customError) {
+      setCurrentStep((step) => step + 1);
+    }
+  };
+
+  const onBack = () => {
+    setCurrentStep((step) => step - 1);
+  };
+
+  return (
+    <div className="relative">
+      <ol className="grid grid-cols-1 md:grid-cols-5 place-items-center gap-2 p-1 md:border md:rounded-sm">
+        <li
+          className={
+            'md:hidden w-full text-center py-2 bg-primary text-secondary dark:text-secondary-foreground border rounded-sm'
+          }
+        >
+          Current Step: <span>{steps[currentStep].name}</span>
+        </li>
+        {steps.map((step) => {
+          return (
+            <li
+              key={step.id}
+              className={cn(
+                'hidden md:block w-full text-center py-2',
+                currentStep === step.id - 1 &&
+                  'bg-primary text-secondary dark:text-secondary-foreground border rounded-sm'
+              )}
+            >
+              {step.name}
+            </li>
+          );
+        })}
+      </ol>
+      <FormWrapper className="border-none">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(() => {})} className="py-6 ">
+            <div className="space-y-8">
+              {currentStep === 0 && (
+                <LocationStep
+                  form={form}
+                  countries={countries}
+                  setCustomError={setCustomError}
+                />
+              )}
+            </div>
+            <FormError className="my-8" message={customError} />
+            <div className="flex flex-col space-y-2 md:space-y-0 py-4">
+              <Button
+                size="icon"
+                className="w-full md:w-10 md:absolute left-0 top-[35vh]"
+                onClick={onBack}
+                disabled={currentStep === 0}
+              >
+                <ChevronLeft />
+              </Button>
+
+              <Button
+                size="icon"
+                onClick={onNext}
+                disabled={currentStep === steps.length - 1 || !!customError}
+                className="w-full md:w-10 md:absolute right-0 top-[35vh]"
+              >
+                <ChevronRight />
+              </Button>
+              {currentStep === steps.length - 1 && (
+                <Button type="submit">Create</Button>
+              )}
+            </div>
+          </form>
+        </Form>
+      </FormWrapper>
+    </div>
+  );
+};
+
+export default CreateForm;

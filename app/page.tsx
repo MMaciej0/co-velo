@@ -1,4 +1,7 @@
+import React from 'react';
+
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import HomeForm from '@/app/_components/HomeForm';
 
 export default function Home() {
   return (
@@ -15,7 +18,9 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="w-full pt-20 px-6 md:px-0 lg:ml-16">home form</div>
+        <div className="w-full pt-20 px-6 md:px-0 lg:ml-16">
+          <HomeForm />
+        </div>
       </div>
     </MaxWidthWrapper>
   );
