@@ -1,9 +1,8 @@
-import React, { FC, useEffect, useState } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import React, { FC, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useQuery } from '@tanstack/react-query';
 import { getStartingPoint } from '@/actions/startingPoint';
-import { TCreateSchema } from '@/lib/validators/createSchema';
 import { cn } from '@/lib/utils';
 import { TCountry } from '@/lib/validators/countrySchema';
 
@@ -33,23 +32,19 @@ import {
 import { Input } from '@/components/ui/input';
 
 interface LocationStepProps {
-  form: UseFormReturn<TCreateSchema>;
   countries: TCountry[];
   setCustomError: (message: string) => void;
 }
 
-const LocationStep: FC<LocationStepProps> = ({
-  form,
-  countries,
-  setCustomError,
-}) => {
+const LocationStep: FC<LocationStepProps> = ({ countries, setCustomError }) => {
   const [countryListOpen, setCountryListOpen] = useState(false);
-  const debouncedCity = useDebounce(form.watch('city'), 1000);
-  const debouncedStreet = useDebounce(form.watch('street'), 1000);
-  const debouncedPostalCode = useDebounce(form.watch('postalCode'), 1000);
-  const country = form.watch('country');
+  const { watch, setValue, control, reset } = useFormContext();
+  const debouncedCity = useDebounce(watch('city'), 1000);
+  const debouncedStreet = useDebounce(watch('street'), 1000);
+  const debouncedPostalCode = useDebounce(watch('postalCode'), 1000);
+  const country = watch('country');
 
-  const { data: startingPoint, isLoading: isStartingPointLoading } = useQuery({
+  const { data: startingPoint } = useQuery({
     queryKey: [
       'startingPoint',
       country,
@@ -66,8 +61,8 @@ const LocationStep: FC<LocationStepProps> = ({
       ).then((data) => {
         if (data) {
           setCustomError('');
-          form.setValue('coords.lat', data.lat);
-          form.setValue('coords.lon', data.lon);
+          setValue('coords.lat', data.lat);
+          setValue('coords.lon', data.lon);
           return data;
         } else {
           setCustomError(
@@ -82,7 +77,7 @@ const LocationStep: FC<LocationStepProps> = ({
   return (
     <>
       <FormField
-        control={form.control}
+        control={control}
         name="country"
         render={({ field }) => (
           <FormItem>
@@ -118,9 +113,9 @@ const LocationStep: FC<LocationStepProps> = ({
                           value={country.name}
                           key={country.id}
                           onSelect={() => {
-                            form.reset();
+                            reset();
                             setCustomError('');
-                            form.setValue('country', country.name);
+                            setValue('country', country.name);
                             setCountryListOpen(false);
                           }}
                         >
@@ -141,7 +136,7 @@ const LocationStep: FC<LocationStepProps> = ({
       />
       <FormField
         disabled={!country}
-        control={form.control}
+        control={control}
         name="city"
         render={({ field }) => (
           <FormItem>
@@ -172,7 +167,7 @@ const LocationStep: FC<LocationStepProps> = ({
       {debouncedCity && (
         <>
           <FormField
-            control={form.control}
+            control={control}
             name="street"
             render={({ field }) => (
               <FormItem>
@@ -188,7 +183,7 @@ const LocationStep: FC<LocationStepProps> = ({
             )}
           />
           <FormField
-            control={form.control}
+            control={control}
             name="postalCode"
             render={({ field }) => (
               <FormItem>
@@ -207,10 +202,10 @@ const LocationStep: FC<LocationStepProps> = ({
       )}
 
       {startingPoint && (
-        <p className="p-2 bg-secondary border-[2px] border-primary rounded-md">
+        <div className="p-2 bg-secondary border-[2px] border-primary rounded-md">
           Your starting point is:{' '}
           <p className="font-semibold">{startingPoint.display_name}</p>
-        </p>
+        </div>
       )}
     </>
   );

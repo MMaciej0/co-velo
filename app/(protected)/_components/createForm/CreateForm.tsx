@@ -8,11 +8,14 @@ import { TCountry } from '@/lib/validators/countrySchema';
 import { cn } from '@/lib/utils';
 
 import LocationStep from './LocationStep';
+import MapStep from './MapStep';
+import DepartureStep from './DepartureStep';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import FormWrapper from '@/components/FromWrapper';
 import FormError from '@/components/FormError';
+import { add } from 'date-fns';
 
 const steps = [
   {
@@ -20,8 +23,12 @@ const steps = [
     name: 'Location',
     fields: ['city', 'country', 'street', 'postalCode'],
   },
-  { id: 2, name: 'Departure', fields: ['departure'] },
-  { id: 3, name: 'Map', fields: ['map'] },
+  { id: 2, name: 'Map', fields: ['startingPointDescription'] },
+  {
+    id: 3,
+    name: 'Departure',
+    fields: ['departureTime', 'departureDate', 'title'],
+  },
   { id: 4, name: 'Ride type', fields: ['type'] },
   { id: 5, name: 'Ride description', fields: ['description'] },
 ];
@@ -31,6 +38,8 @@ type TFields = keyof TCreateSchema;
 interface CreateFormProps {
   countries: TCountry[];
 }
+
+const initialDate = add(new Date(), { days: 1 });
 
 const CreateForm: FC<CreateFormProps> = ({ countries }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -45,6 +54,10 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
         lat: '',
         lon: '',
       },
+      startingPointDescription: '',
+      departureTime: '',
+      departureDate: initialDate,
+      title: '',
     },
     resolver: zodResolver(createSchema),
   });
@@ -62,6 +75,8 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
   const onBack = () => {
     setCurrentStep((step) => step - 1);
   };
+
+  console.log(form.formState.errors);
 
   return (
     <div className="relative">
@@ -88,21 +103,24 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
           );
         })}
       </ol>
-      <FormWrapper className="border-none">
+      <FormWrapper className="border-none lg:max-w-[600px]">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(() => {})} className="py-6 ">
+          <form className="py-6 ">
             <div className="space-y-8">
               {currentStep === 0 && (
                 <LocationStep
-                  form={form}
                   countries={countries}
                   setCustomError={setCustomError}
                 />
               )}
+              {currentStep === 1 && <MapStep />}
+              {currentStep === 2 && <DepartureStep />}
             </div>
+
             <FormError className="my-8" message={customError} />
             <div className="flex flex-col space-y-2 md:space-y-0 py-4">
               <Button
+                type="button"
                 size="icon"
                 className="w-full md:w-10 md:absolute left-0 top-[35vh]"
                 onClick={onBack}
@@ -112,6 +130,7 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
               </Button>
 
               <Button
+                type="button"
                 size="icon"
                 onClick={onNext}
                 disabled={currentStep === steps.length - 1 || !!customError}

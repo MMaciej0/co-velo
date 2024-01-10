@@ -49,8 +49,8 @@ model Listing {
   city               String
   postalCode         String?
   street             String?
-  startDate          DateTime
-  departure          String
+  departureDate      DateTime
+  departureTime      String
   meetingDescription String
   bikeType           String
   rideType           String
