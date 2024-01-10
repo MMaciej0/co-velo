@@ -25,6 +25,19 @@ const formSchema = z.object({
     .string()
     .min(1, 'This field is required.')
     .max(40, 'Please use shorter title (max 40 characters).'),
+  rideType: z.string().min(1, 'This field is required.'),
+  bikeType: z.string().min(1, 'This field is required.'),
+  pace: z.union([
+    z
+      .number()
+      .int()
+      .positive()
+      .gte(10, 'Sorry, it is walking pace.')
+      .lte(50, 'Sorry, you will get a ticket for that speed.'),
+    z.nan(),
+    z.literal(''),
+  ]),
+  route: z.union([z.string().url(), z.literal('')]),
 });
 
 export const createSchema = formSchema.extend({

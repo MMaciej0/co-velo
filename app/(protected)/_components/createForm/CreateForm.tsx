@@ -6,16 +6,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TCreateSchema, createSchema } from '@/lib/validators/createSchema';
 import { TCountry } from '@/lib/validators/countrySchema';
 import { cn } from '@/lib/utils';
+import { add } from 'date-fns';
 
 import LocationStep from './LocationStep';
 import MapStep from './MapStep';
+import InfoStep from './InfoStep';
 import DepartureStep from './DepartureStep';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import FormWrapper from '@/components/FromWrapper';
 import FormError from '@/components/FormError';
-import { add } from 'date-fns';
 
 const steps = [
   {
@@ -29,8 +30,8 @@ const steps = [
     name: 'Departure',
     fields: ['departureTime', 'departureDate', 'title'],
   },
-  { id: 4, name: 'Ride type', fields: ['type'] },
-  { id: 5, name: 'Ride description', fields: ['description'] },
+  { id: 4, name: 'Info', fields: ['bikeType', 'rideType', 'pace', 'route'] },
+  { id: 5, name: 'Description', fields: ['description'] },
 ];
 
 type TFields = keyof TCreateSchema;
@@ -58,6 +59,10 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
       departureTime: '',
       departureDate: initialDate,
       title: '',
+      bikeType: '',
+      rideType: '',
+      route: '',
+      pace: '',
     },
     resolver: zodResolver(createSchema),
   });
@@ -115,6 +120,7 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
               )}
               {currentStep === 1 && <MapStep />}
               {currentStep === 2 && <DepartureStep />}
+              {currentStep === 3 && <InfoStep />}
             </div>
 
             <FormError className="my-8" message={customError} />
