@@ -38,6 +38,7 @@ const formSchema = z.object({
     z.literal(''),
   ]),
   route: z.union([z.string().url(), z.literal('')]),
+  description: z.string().optional(),
 });
 
 export const createSchema = formSchema.extend({

@@ -8,6 +8,7 @@ import { TCountry } from '@/lib/validators/countrySchema';
 import { cn } from '@/lib/utils';
 import { add } from 'date-fns';
 
+import DescriptionStep from './DescriptionStep';
 import LocationStep from './LocationStep';
 import MapStep from './MapStep';
 import InfoStep from './InfoStep';
@@ -63,6 +64,7 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
       rideType: '',
       route: '',
       pace: '',
+      description: '',
     },
     resolver: zodResolver(createSchema),
   });
@@ -121,6 +123,7 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
               {currentStep === 1 && <MapStep />}
               {currentStep === 2 && <DepartureStep />}
               {currentStep === 3 && <InfoStep />}
+              {currentStep === 4 && <DescriptionStep />}
             </div>
 
             <FormError className="my-8" message={customError} />

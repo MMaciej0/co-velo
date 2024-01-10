@@ -48,7 +48,9 @@ const InfoStep = () => {
         name="rideType"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Ride type</FormLabel>
+            <FormLabel className="font-semibold text-base block my-2">
+              Ride type
+            </FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
@@ -72,7 +74,9 @@ const InfoStep = () => {
         name="bikeType"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Bike type</FormLabel>
+            <FormLabel className="font-semibold text-base block my-2">
+              Bike type
+            </FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
