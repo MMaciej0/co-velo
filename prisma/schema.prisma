@@ -43,27 +43,27 @@ model Account {
 }
 
 model Listing {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  title              String
-  country            String
-  city               String
-  postalCode         String?
-  street             String?
-  departureDate      DateTime
-  departureTime      String
-  meetingDescription String
-  bikeType           String
-  rideType           String
-  pace               String?
-  route              String?
-  description        String?
-  createdAt          DateTime @default(now())
-  distance           Int
+  id                       String   @id @default(auto()) @map("_id") @db.ObjectId
+  title                    String
+  country                  String
+  city                     String
+  postalCode               String?
+  street                   String?
+  departureDate            DateTime
+  departureTime            String
+  startingPointDescription String
+  bikeType                 String
+  rideType                 String
+  pace                     String?
+  route                    String?
+  description              String?
+  createdAt                DateTime @default(now())
+  distance                 String?
 
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String @db.ObjectId
 
-  meetingPoint MeetingPoint?
+  coords MeetingPoint?
 
   participants Participant[]
   messages     Message[]
@@ -82,7 +82,7 @@ model Participant {
 model MeetingPoint {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   lat       Float
-  lng       Float
+  lon       Float
   listing   Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
   listingId String   @unique @db.ObjectId
 }

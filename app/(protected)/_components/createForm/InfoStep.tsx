@@ -113,6 +113,20 @@ const InfoStep = () => {
       />
       <FormField
         control={control}
+        name="distance"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="font-semibold text-base block my-2">
+              Distance
+            </FormLabel>
+            <Input type="text" {...field} placeholder="Distance" />
+            <FormDescription>Distance in km. (optional).</FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={control}
         name="route"
         render={({ field }) => (
           <FormItem>

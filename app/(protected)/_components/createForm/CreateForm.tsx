@@ -31,7 +31,11 @@ const steps = [
     name: 'Departure',
     fields: ['departureTime', 'departureDate', 'title'],
   },
-  { id: 4, name: 'Info', fields: ['bikeType', 'rideType', 'pace', 'route'] },
+  {
+    id: 4,
+    name: 'Info',
+    fields: ['bikeType', 'rideType', 'pace', 'route', 'distance'],
+  },
   { id: 5, name: 'Description', fields: ['description'] },
 ];
 
@@ -65,6 +69,7 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
       route: '',
       pace: '',
       description: '',
+      distance: '',
     },
     resolver: zodResolver(createSchema),
   });

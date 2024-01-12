@@ -33,6 +33,16 @@ const paceSchema = z.object({
     .or(z.literal('')),
 });
 
+const distanceSchema = z.object({
+  distance: z
+    .string()
+    .refine((val) => /^[0-9]*$/.test(val), {
+      message: 'Must be a positive number (integer).',
+    })
+    .optional()
+    .or(z.literal('')),
+});
+
 const formSchema = z.object({
   country: requiredString,
   city: requiredString,
@@ -66,6 +76,7 @@ export const createSchema = formSchema
   .extend({
     coords: startingPointSchema.omit({ display_name: true }),
   })
+  .and(distanceSchema)
   .and(paceSchema);
 
 export type TCreateSchema = z.infer<typeof createSchema>;
