@@ -3,7 +3,6 @@ import { useFormContext } from 'react-hook-form';
 import { TCreateSchema } from '@/lib/validators/createSchema';
 
 import {
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,11 +23,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 const DepartureStep = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const { watch, setValue, control } = useFormContext<TCreateSchema>();
-
-  const date = watch('departureDate');
-
-  console.log(date);
+  const { control } = useFormContext<TCreateSchema>();
 
   return (
     <>

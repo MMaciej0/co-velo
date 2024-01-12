@@ -103,12 +103,7 @@ const InfoStep = () => {
             <FormLabel className="font-semibold text-base block my-2">
               Average pace
             </FormLabel>
-            <Input
-              type="number"
-              {...field}
-              placeholder="Pace"
-              onChange={(e) => field.onChange(parseInt(e.target.value))}
-            />
+            <Input type="text" {...field} placeholder="Pace" />
             <FormDescription>
               Enter the average pace of your ride in km/h (optional).
             </FormDescription>

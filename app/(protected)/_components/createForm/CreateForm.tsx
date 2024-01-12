@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FC, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TCreateSchema, createSchema } from '@/lib/validators/createSchema';
 import { TCountry } from '@/lib/validators/countrySchema';
@@ -83,7 +83,9 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
     setCurrentStep((step) => step - 1);
   };
 
-  console.log(form.formState.errors);
+  const onSubmit: SubmitHandler<TCreateSchema> = async (data) => {
+    console.log(data);
+  };
 
   return (
     <div className="relative">
@@ -112,7 +114,7 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
       </ol>
       <FormWrapper className="border-none lg:max-w-[600px]">
         <Form {...form}>
-          <form className="py-6 ">
+          <form className="py-6" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-8">
               {currentStep === 0 && (
                 <LocationStep
@@ -127,7 +129,7 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
             </div>
 
             <FormError className="my-8" message={customError} />
-            <div className="flex flex-col space-y-2 md:space-y-0 py-4">
+            <div className="flex flex-col space-y-2 md:space-y-0 pt-16">
               <Button
                 type="button"
                 size="icon"
@@ -148,7 +150,9 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
                 <ChevronRight />
               </Button>
               {currentStep === steps.length - 1 && (
-                <Button type="submit">Create</Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  Create
+                </Button>
               )}
             </div>
           </form>

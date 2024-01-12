@@ -1,3 +1,7 @@
+import {
+  bikeTypesOptions,
+  rideTypesOptions,
+} from '@/app/(protected)/_components/createForm/InfoStep';
 import * as z from 'zod';
 
 export const startingPointSchema = z.object({
@@ -6,43 +10,62 @@ export const startingPointSchema = z.object({
   display_name: z.string(),
 });
 
+const requiredString = z.string().min(1, 'This field is required.');
+
 export type TStartingPointSchema = z.infer<typeof startingPointSchema>;
 
+const paceSchema = z.object({
+  pace: z
+    .string()
+    .refine((val) => /^[0-9]*$/.test(val), {
+      message: 'Must be a positive number (integer).',
+    })
+    .refine(
+      (pace) => {
+        const num = Number(pace);
+        return pace === '' || (num > 10 && num <= 50);
+      },
+      {
+        message: 'Must be between 11 and 50.',
+      }
+    )
+    .optional()
+    .or(z.literal('')),
+});
+
 const formSchema = z.object({
-  country: z.string().min(1, 'This field is required.'),
-  city: z.string().min(1, 'This field is required.'),
+  country: requiredString,
+  city: requiredString,
   street: z.string(),
   postalCode: z.string(),
-  startingPointDescription: z.string().min(1, 'This field is required.'),
-  departureTime: z.string().min(1, 'This field is required.'),
+  startingPointDescription: requiredString,
+  departureTime: requiredString,
   departureDate: z
     .date({
       required_error: 'Please select a date',
       invalid_type_error: "That's not a date.",
     })
     .min(new Date(), 'The closest date you can choose is tomorrow.'),
-  title: z
-    .string()
-    .min(1, 'This field is required.')
-    .max(40, 'Please use shorter title (max 40 characters).'),
-  rideType: z.string().min(1, 'This field is required.'),
-  bikeType: z.string().min(1, 'This field is required.'),
-  pace: z.union([
-    z
-      .number()
-      .int()
-      .positive()
-      .gte(10, 'Sorry, it is walking pace.')
-      .lte(50, 'Sorry, you will get a ticket for that speed.'),
-    z.nan(),
-    z.literal(''),
-  ]),
+  title: requiredString.max(
+    40,
+    'Please use shorter title (max 40 characters).'
+  ),
+  rideType: requiredString.refine(
+    (val) => rideTypesOptions.find((type) => type.value === val),
+    'Incorrect ride type.'
+  ),
+  bikeType: requiredString.refine(
+    (val) => bikeTypesOptions.find((type) => type.value === val),
+    'Incorrect ride type.'
+  ),
   route: z.union([z.string().url(), z.literal('')]),
   description: z.string().optional(),
 });
 
-export const createSchema = formSchema.extend({
-  coords: startingPointSchema.omit({ display_name: true }),
-});
+export const createSchema = formSchema
+  .extend({
+    coords: startingPointSchema.omit({ display_name: true }),
+  })
+  .and(paceSchema);
 
 export type TCreateSchema = z.infer<typeof createSchema>;
