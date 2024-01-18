@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import Link from 'next/link';
-import { auth } from '@/auth';
-import { cn } from '@/lib/utils';
+import { cn, getCurrentUser } from '@/lib/utils';
 
 import ToggleThemeButton from '@/app/_components/navbar/ToggleThemeButton';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
@@ -12,7 +11,7 @@ import UserMenu from '@/app/_components/navbar/UserMenu';
 interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = async ({}) => {
-  const session = await auth();
+  const currentUser = await getCurrentUser();
 
   return (
     <div className="fixed top-0 inset-x-0 bg-background z-50">
@@ -28,7 +27,7 @@ const Navbar: FC<NavbarProps> = async ({}) => {
               </Link>
             </div>
             <div className="flex items-center">
-              {session?.user ? (
+              {currentUser ? (
                 <UserMenu />
               ) : (
                 <>

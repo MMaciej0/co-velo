@@ -10,8 +10,8 @@ import { env } from './lib/validators/env';
 export default {
   providers: [
     Google({
-      clientId: env.AUTH_GOOGLE_ID,
-      clientSecret: env.AUTH_GOOGLE_SECRET,
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
     Credentials({
       async authorize(credentials) {
