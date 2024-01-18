@@ -13,11 +13,11 @@ const FormError: FC<FormErrorProps> = ({ message, className }) => {
   return (
     <div
       className={cn(
-        'bg-destructive/15 p-3 rounded-md flex items-center justify-center gap-x-2 text-sm text-destructive',
+        'bg-destructive/15 p-3 rounded-md flex items-center space-x-6 text-sm text-destructive',
         className
       )}
     >
-      <FaExclamationTriangle className="h-4 w-4" />
+      <FaExclamationTriangle className="h-6 w-6 flex-shrink" />
       <p>{message}</p>
     </div>
   );

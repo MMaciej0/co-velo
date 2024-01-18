@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import {
@@ -21,33 +21,26 @@ const MapStep = () => {
   );
 
   const { watch, setValue, control } = useFormContext<TCreateSchema>();
-  const lat = Number(watch('coords.lat'));
-  const lon = Number(watch('coords.lon'));
+  const lat = Number(watch('startingPointLat'));
+  const lon = Number(watch('startingPointLon'));
 
   const setNewCoords = (coords: { lat: number; lng: number }) => {
-    setValue('coords.lat', coords.lat.toString());
-    setValue('coords.lon', coords.lng.toString());
+    setValue('startingPointLat', coords.lat.toString());
+    setValue('startingPointLon', coords.lng.toString());
   };
 
   return (
     <>
-      <FormField
-        control={control}
-        name="coords.lat"
-        render={() => (
-          <FormItem className="space-y-4">
-            <FormLabel className="font-semibold text-base">
-              Your starting point
-            </FormLabel>
-            <Map lat={lat} lon={lon} setNewCoords={setNewCoords} />
-            <FormDescription>
-              The map marker can be dragged (just clink on it and set dragable),
-              you can precisely determine the point where you want to start your
-              ride.
-            </FormDescription>
-          </FormItem>
-        )}
-      />
+      <FormItem className="space-y-4">
+        <FormLabel className="font-semibold text-base">
+          Your starting point
+        </FormLabel>
+        <Map lat={lat} lon={lon} setNewCoords={setNewCoords} />
+        <FormDescription>
+          The map marker can be dragged (just clink on it and set dragable), you
+          can precisely determine the point where you want to start your ride.
+        </FormDescription>
+      </FormItem>
       <FormField
         control={control}
         name="startingPointDescription"

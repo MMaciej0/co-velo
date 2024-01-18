@@ -44,6 +44,7 @@ model Account {
 
 model Listing {
   id                       String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug                     String   @unique
   title                    String
   country                  String
   city                     String
@@ -52,6 +53,8 @@ model Listing {
   departureDate            DateTime
   departureTime            String
   startingPointDescription String
+  startingPointLat         Float
+  StartingPointLon         Float
   bikeType                 String
   rideType                 String
   pace                     String?
@@ -62,8 +65,6 @@ model Listing {
 
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String @db.ObjectId
-
-  coords MeetingPoint?
 
   participants Participant[]
   messages     Message[]
@@ -77,14 +78,6 @@ model Participant {
   userId    String   @db.ObjectId
 
   @@unique([listingId, userId])
-}
-
-model MeetingPoint {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  lat       Float
-  lon       Float
-  listing   Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  listingId String   @unique @db.ObjectId
 }
 
 model Message {

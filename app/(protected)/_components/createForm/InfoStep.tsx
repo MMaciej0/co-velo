@@ -103,7 +103,7 @@ const InfoStep = () => {
             <FormLabel className="font-semibold text-base block my-2">
               Average pace
             </FormLabel>
-            <Input type="text" {...field} placeholder="Pace" />
+            <Input type="number" {...field} placeholder="Pace" />
             <FormDescription>
               Enter the average pace of your ride in km/h (optional).
             </FormDescription>
@@ -119,7 +119,7 @@ const InfoStep = () => {
             <FormLabel className="font-semibold text-base block my-2">
               Distance
             </FormLabel>
-            <Input type="text" {...field} placeholder="Distance" />
+            <Input type="number" {...field} placeholder="Distance" />
             <FormDescription>Distance in km. (optional).</FormDescription>
             <FormMessage />
           </FormItem>

@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ZodError } from 'zod';
@@ -28,4 +29,24 @@ export const getZodParsingErrors = (error: ZodError) => {
     errors = { ...errors, [issue.path[0]]: issue.message };
   });
   return errors;
+};
+
+export const toSlug = (str: string) => {
+  // Convert to lowercase and replace spaces with hyphens
+  const slug = str.toLowerCase().replace(/\s+/g, '-');
+
+  // Remove special characters
+  const cleanSlug = slug.replace(/[^\w-]/g, '');
+
+  return cleanSlug;
+};
+
+export const getCurrentUser = async () => {
+  const session = await auth();
+
+  if (!session?.user) {
+    return null;
+  }
+
+  return session.user;
 };

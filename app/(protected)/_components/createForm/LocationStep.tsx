@@ -61,8 +61,8 @@ const LocationStep: FC<LocationStepProps> = ({ countries, setCustomError }) => {
       ).then((data) => {
         if (data) {
           setCustomError('');
-          setValue('coords.lat', data.lat);
-          setValue('coords.lon', data.lon);
+          setValue('startingPointLat', data.lat);
+          setValue('startingPointLon', data.lon);
           return data;
         } else {
           setCustomError(

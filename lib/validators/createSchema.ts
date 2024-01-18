@@ -49,6 +49,8 @@ const formSchema = z.object({
   street: z.string(),
   postalCode: z.string(),
   startingPointDescription: requiredString,
+  startingPointLat: requiredString,
+  startingPointLon: requiredString,
   departureTime: requiredString,
   departureDate: z
     .date({
@@ -72,11 +74,6 @@ const formSchema = z.object({
   description: z.string().optional(),
 });
 
-export const createSchema = formSchema
-  .extend({
-    coords: startingPointSchema.omit({ display_name: true }),
-  })
-  .and(distanceSchema)
-  .and(paceSchema);
+export const createSchema = formSchema.and(distanceSchema).and(paceSchema);
 
 export type TCreateSchema = z.infer<typeof createSchema>;

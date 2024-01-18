@@ -2,11 +2,12 @@
 
 import React, { FC, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { add } from 'date-fns';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TCreateSchema, createSchema } from '@/lib/validators/createSchema';
 import { TCountry } from '@/lib/validators/countrySchema';
 import { cn } from '@/lib/utils';
-import { add } from 'date-fns';
+import { createRide } from '@/actions/create';
 
 import DescriptionStep from './DescriptionStep';
 import LocationStep from './LocationStep';
@@ -18,6 +19,8 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import FormWrapper from '@/components/FromWrapper';
 import FormError from '@/components/FormError';
+import { useToast } from '@/components/ui/use-toast';
+import LoadingButton from '@/components/LoadingButton';
 
 const steps = [
   {
@@ -50,17 +53,16 @@ const initialDate = add(new Date(), { days: 1 });
 const CreateForm: FC<CreateFormProps> = ({ countries }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [customError, setCustomError] = useState('');
+
   const form = useForm<TCreateSchema>({
     defaultValues: {
       country: '',
       city: '',
       street: '',
       postalCode: '',
-      coords: {
-        lat: '',
-        lon: '',
-      },
       startingPointDescription: '',
+      startingPointLat: '',
+      startingPointLon: '',
       departureTime: '',
       departureDate: initialDate,
       title: '',
@@ -85,11 +87,21 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
   };
 
   const onBack = () => {
+    setCustomError('');
     setCurrentStep((step) => step - 1);
   };
 
-  const onSubmit: SubmitHandler<TCreateSchema> = async (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<TCreateSchema> = async (formData) => {
+    setCustomError('');
+    try {
+      await createRide(formData).then((callback) => {
+        if (callback?.error) {
+          setCustomError(callback.error);
+        }
+      });
+    } catch (error) {
+      setCustomError('Ops, sometching went wrong. Please try again.');
+    }
   };
 
   return (
@@ -155,9 +167,12 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
                 <ChevronRight />
               </Button>
               {currentStep === steps.length - 1 && (
-                <Button type="submit" disabled={form.formState.isSubmitting}>
+                <LoadingButton
+                  type="submit"
+                  isLoading={form.formState.isSubmitting}
+                >
                   Create
-                </Button>
+                </LoadingButton>
               )}
             </div>
           </form>
