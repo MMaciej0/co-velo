@@ -8,6 +8,7 @@ export const startingPointSchema = z.object({
   lat: z.string(),
   lon: z.string(),
   display_name: z.string(),
+  name: z.string(),
 });
 
 const requiredString = z.string().min(1, 'This field is required.');

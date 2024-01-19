@@ -13,7 +13,7 @@ const LoadingButton: FC<LoadingButtonProps> = ({
 }) => {
   return (
     <Button type="submit" disabled={props.disabled || isLoading} {...props}>
-      {isLoading && <Loader2 size={16} className="animate-spin" />}
+      {isLoading && <Loader2 size={16} className="animate-spin mx-4" />}
       {children}
     </Button>
   );

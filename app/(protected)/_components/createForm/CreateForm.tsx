@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { createRide } from '@/actions/create';
 
 import DescriptionStep from './DescriptionStep';
-import LocationStep from './LocationStep';
+import LocationStep from './locationStep/LocationStep';
 import MapStep from './MapStep';
 import InfoStep from './InfoStep';
 import DepartureStep from './DepartureStep';
@@ -18,7 +18,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import FormWrapper from '@/components/FromWrapper';
-import FormError from '@/components/FormError';
 import { useToast } from '@/components/ui/use-toast';
 import LoadingButton from '@/components/LoadingButton';
 
@@ -52,7 +51,6 @@ const initialDate = add(new Date(), { days: 1 });
 
 const CreateForm: FC<CreateFormProps> = ({ countries }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [customError, setCustomError] = useState('');
 
   const form = useForm<TCreateSchema>({
     defaultValues: {
@@ -75,32 +73,38 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
     },
     resolver: zodResolver(createSchema),
   });
+  const { toast } = useToast();
 
   const onNext = async () => {
     const fieldsToValidate = steps[currentStep].fields as TFields[];
     const validatedVields = await form.trigger(fieldsToValidate, {
       shouldFocus: true,
     });
-    if (validatedVields && !customError) {
+    if (validatedVields) {
       setCurrentStep((step) => step + 1);
     }
   };
 
   const onBack = () => {
-    setCustomError('');
     setCurrentStep((step) => step - 1);
   };
 
   const onSubmit: SubmitHandler<TCreateSchema> = async (formData) => {
-    setCustomError('');
     try {
       await createRide(formData).then((callback) => {
         if (callback?.error) {
-          setCustomError(callback.error);
+          toast({
+            variant: 'destructive',
+            title: 'Uh oh! Something went wrong.',
+            description: callback.error,
+          });
         }
       });
     } catch (error) {
-      setCustomError('Ops, sometching went wrong. Please try again.');
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong. Please try again',
+      });
     }
   };
 
@@ -133,19 +137,12 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
         <Form {...form}>
           <form className="py-6" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-8">
-              {currentStep === 0 && (
-                <LocationStep
-                  countries={countries}
-                  setCustomError={setCustomError}
-                />
-              )}
+              {currentStep === 0 && <LocationStep countries={countries} />}
               {currentStep === 1 && <MapStep />}
               {currentStep === 2 && <DepartureStep />}
               {currentStep === 3 && <InfoStep />}
               {currentStep === 4 && <DescriptionStep />}
             </div>
-
-            <FormError className="my-8" message={customError} />
             <div className="flex flex-col space-y-2 md:space-y-0 pt-16">
               <Button
                 type="button"
@@ -161,7 +158,7 @@ const CreateForm: FC<CreateFormProps> = ({ countries }) => {
                 type="button"
                 size="icon"
                 onClick={onNext}
-                disabled={currentStep === steps.length - 1 || !!customError}
+                disabled={currentStep === steps.length - 1}
                 className="w-full md:w-10 md:absolute right-0 top-[35vh]"
               >
                 <ChevronRight />

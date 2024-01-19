@@ -11,23 +11,18 @@ import {
 export const getStartingPoint = async (
   country: string,
   city: string,
-  street?: string,
-  postalCode?: string
-): Promise<TStartingPointSchema | undefined> => {
-  let address = encodeURIComponent(`${country}, ${city}`);
+  street?: string
+): Promise<TStartingPointSchema[] | undefined> => {
+  const encodedCity = encodeURIComponent(city);
+  const encodedCountry = encodeURIComponent(country);
+  const encodedStreet = street ? `&street=${encodeURIComponent(street)}` : '';
 
-  if (street) {
-    address += encodeURIComponent(`, ${street}`);
-  }
-
-  if (postalCode) {
-    address += encodeURIComponent(`, ${postalCode}`);
-  }
+  const address = `https://nominatim.openstreetmap.org/search?city=${encodedCity}&country=${encodedCountry}${encodedStreet}&format=json&featureType=${
+    street ? 'street' : 'city'
+  }`;
 
   try {
-    const { data } = await axios.get(
-      `https://nominatim.openstreetmap.org/search?q=${address}&format=json&limit=1`
-    );
+    const { data } = await axios.get(address);
     const startingPointArrSchema = z.array(startingPointSchema);
     const validatedResult = startingPointArrSchema.safeParse(data);
 
@@ -35,7 +30,8 @@ export const getStartingPoint = async (
       console.log({ error: getZodParsingErrors(validatedResult.error) });
       return;
     }
-    return validatedResult.data[0];
+
+    return validatedResult.data;
   } catch (error) {
     console.log({ error: getErrorMessage(error) });
   }
