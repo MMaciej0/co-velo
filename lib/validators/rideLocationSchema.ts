@@ -43,13 +43,9 @@ const paceSchema = z.object({
 });
 
 const distanceSchema = z.object({
-  distance: z
-    .string()
-    .refine((val) => /^[0-9]*$/.test(val), {
-      message: 'Must be a positive number (integer).',
-    })
-    .optional()
-    .or(z.literal('')),
+  distance: requiredString.refine((val) => /^[0-9]*$/.test(val), {
+    message: 'Must be a positive number (integer).',
+  }),
 });
 
 const createFormSchema = z.object({

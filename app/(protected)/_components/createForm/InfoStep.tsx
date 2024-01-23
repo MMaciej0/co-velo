@@ -25,7 +25,7 @@ export const rideTypesOptions = [
   { value: 'chill', label: 'Chill' },
   { value: 'sightseeing', label: 'Sightseeing' },
   { value: 'training', label: 'Training' },
-  { value: 'coffeeRide', label: 'Coffee Ride' },
+  { value: 'coffee ride', label: 'Coffee Ride' },
   { value: 'other', label: 'Other' },
 ];
 
@@ -120,7 +120,7 @@ const InfoStep = () => {
               Distance
             </FormLabel>
             <Input type="number" {...field} placeholder="Distance" />
-            <FormDescription>Distance in km. (optional).</FormDescription>
+            <FormDescription>Distance in km.</FormDescription>
             <FormMessage />
           </FormItem>
         )}
