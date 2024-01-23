@@ -69,7 +69,7 @@ export const getStartingPoint = async (
 export const getAvailableRidesData = async (
   where: Prisma.ListingWhereInput,
   select: Prisma.ListingScalarFieldEnum
-): Promise<string[] | [] | undefined> => {
+): Promise<string[] | undefined> => {
   try {
     const data = await prisma.listing.findMany({
       where,
