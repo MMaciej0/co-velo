@@ -26,7 +26,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/Heading';
 import { register } from '@/actions/register';
-import FormError from '@/components/FormError';
+import FormError from '@/components/FormMessage';
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();

@@ -4,14 +4,22 @@ import {
 } from '@/app/(protected)/_components/createForm/InfoStep';
 import * as z from 'zod';
 
+const requiredString = z.string().min(1, 'This field is required.');
+
+export const countrySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  iso2: z.string(),
+});
+
+export type TCountry = z.infer<typeof countrySchema>;
+
 export const startingPointSchema = z.object({
   lat: z.string(),
   lon: z.string(),
   display_name: z.string(),
   name: z.string(),
 });
-
-const requiredString = z.string().min(1, 'This field is required.');
 
 export type TStartingPointSchema = z.infer<typeof startingPointSchema>;
 
@@ -44,11 +52,11 @@ const distanceSchema = z.object({
     .or(z.literal('')),
 });
 
-const formSchema = z.object({
+const createFormSchema = z.object({
   country: requiredString,
   city: requiredString,
   street: z.string(),
-  postalCode: z.string(),
+  postalCode: z.string().optional(),
   startingPointDescription: requiredString,
   startingPointLat: requiredString,
   startingPointLon: requiredString,
@@ -75,6 +83,16 @@ const formSchema = z.object({
   description: z.string().optional(),
 });
 
-export const createSchema = formSchema.and(distanceSchema).and(paceSchema);
+export const createSchema = createFormSchema
+  .and(distanceSchema)
+  .and(paceSchema);
 
 export type TCreateSchema = z.infer<typeof createSchema>;
+
+export const homeFormSchema = createFormSchema.pick({
+  country: true,
+  city: true,
+  street: true,
+});
+
+export type THomeFormSchema = z.infer<typeof homeFormSchema>;

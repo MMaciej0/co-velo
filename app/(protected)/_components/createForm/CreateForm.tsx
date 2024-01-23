@@ -4,8 +4,11 @@ import React, { FC, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { add } from 'date-fns';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TCreateSchema, createSchema } from '@/lib/validators/createSchema';
-import { TCountry } from '@/lib/validators/countrySchema';
+import {
+  TCountry,
+  TCreateSchema,
+  createSchema,
+} from '@/lib/validators/rideLocationSchema';
 import { cn } from '@/lib/utils';
 import { createRide } from '@/actions/create';
 

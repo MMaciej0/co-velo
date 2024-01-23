@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCountries } from '@/actions/countries';
+import { getCountries } from '@/actions/startingPoint';
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import CreateForm from '@/app/(protected)/_components/createForm/CreateForm';

@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { cn } from '@/lib/utils';
-import { TCountry } from '@/lib/validators/countrySchema';
-import { TCreateSchema } from '@/lib/validators/createSchema';
+import { TCountry, TCreateSchema } from '@/lib/validators/rideLocationSchema';
 
 import CityCombobox from './CityCombobox';
 import StreetCombobox from './StreetCombobox';

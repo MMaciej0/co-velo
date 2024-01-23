@@ -23,7 +23,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import Heading from '@/components/Heading';
 import { login } from '@/actions/login';
-import FormError from '@/components/FormError';
+import FormError from '@/components/FormMessage';
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { TCreateSchema } from '@/lib/validators/createSchema';
+import { TCreateSchema } from '@/lib/validators/rideLocationSchema';
 
 import {
   FormControl,

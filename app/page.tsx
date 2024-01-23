@@ -1,9 +1,17 @@
 import React from 'react';
+import Link from 'next/link';
+import { getAvailableRidesData } from '@/actions/startingPoint';
 
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import HomeForm from '@/app/_components/HomeForm';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import FormError from '@/components/FormMessage';
+import FormWrapper from '@/components/FromWrapper';
+import { Separator } from '@/components/ui/separator';
+import { buttonVariants } from '@/components/ui/button';
 
-export default function Home() {
+export default async function Home() {
+  const availableCountries = await getAvailableRidesData({}, 'country');
+
   return (
     <MaxWidthWrapper className="lg:h-screen relative">
       <div className="grid grid-cols-1 lg:grid-cols-2 h-full place-content-center pb-32 lg:pb-8">
@@ -19,7 +27,28 @@ export default function Home() {
         </div>
 
         <div className="w-full pt-20 px-6 md:px-0 lg:ml-16">
-          <HomeForm />
+          <FormWrapper shadow>
+            {!availableCountries ? (
+              <FormError message="Searching is disabled right now." />
+            ) : (
+              <HomeForm countries={availableCountries} />
+            )}
+            <div className="relative py-2">
+              <Separator className="my-6" />
+              <span className="inline-block absolute right-1/2 translate-x-1/2 bottom-1/2 translate-y-1/2 bg-background px-4 font-semibold">
+                or
+              </span>
+            </div>
+            <Link
+              className={buttonVariants({
+                variant: 'outline',
+                className: 'w-full',
+              })}
+              href="/create"
+            >
+              Create ride
+            </Link>
+          </FormWrapper>
         </div>
       </div>
     </MaxWidthWrapper>

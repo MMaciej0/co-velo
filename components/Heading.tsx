@@ -10,7 +10,9 @@ const Heading: FC<HeadingProps> = ({ heading, subheading }) => {
     <div className="w-full flex flex-col justify-center items-center gap-y-4">
       <h2 className="font-4xl font-semibold">{heading}</h2>
       {subheading && (
-        <p className="text-muted-foreground text-sm">{subheading}</p>
+        <p className="text-muted-foreground text-sm text-center">
+          {subheading}
+        </p>
       )}
     </div>
   );

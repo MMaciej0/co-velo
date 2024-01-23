@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { getStartingPoint } from '@/actions/startingPoint';
 import { useDebounce } from '@/hooks/useDebounce';
-import { TCreateSchema } from '@/lib/validators/createSchema';
+import { TCreateSchema } from '@/lib/validators/rideLocationSchema';
 import { cn } from '@/lib/utils';
 
 import {

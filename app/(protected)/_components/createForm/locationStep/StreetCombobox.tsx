@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useFormContext } from 'react-hook-form';
 import { useDebounce } from '@/hooks/useDebounce';
-import { TCreateSchema } from '@/lib/validators/createSchema';
+import { TCreateSchema } from '@/lib/validators/rideLocationSchema';
 import { getStartingPoint } from '@/actions/startingPoint';
 import { cn } from '@/lib/utils';
 

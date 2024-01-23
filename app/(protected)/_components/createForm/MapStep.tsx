@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { TCreateSchema } from '@/lib/validators/createSchema';
+import { TCreateSchema } from '@/lib/validators/rideLocationSchema';
 import { Textarea } from '@/components/ui/textarea';
 import dynamic from 'next/dynamic';
 

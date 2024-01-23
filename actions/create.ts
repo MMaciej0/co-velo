@@ -2,7 +2,10 @@
 
 import prisma from '@/lib/prisma';
 import { getCurrentUser, toSlug } from '@/lib/utils';
-import { TCreateSchema, createSchema } from '@/lib/validators/createSchema';
+import {
+  TCreateSchema,
+  createSchema,
+} from '@/lib/validators/rideLocationSchema';
 import { redirect } from 'next/navigation';
 
 interface CreateRideReturn {
