@@ -23,7 +23,9 @@ export const getErrorMessage = (error: unknown): string => {
   return message;
 };
 
-export const getZodParsingErrors = (error: ZodError) => {
+export const getZodParsingErrors = (
+  error: ZodError
+): Record<string, string> => {
   let errors: Record<string, string> = {};
   error.issues.forEach((issue) => {
     errors = { ...errors, [issue.path[0]]: issue.message };
@@ -49,4 +51,12 @@ export const getCurrentUser = async () => {
   }
 
   return session.user;
+};
+
+export const capitalizeString = (str: string) => {
+  if (typeof str !== 'string') {
+    return 'Invalid string';
+  }
+
+  return str[0].toUpperCase() + str.slice(1);
 };
