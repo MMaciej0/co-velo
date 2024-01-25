@@ -8,9 +8,6 @@ const LoadingSkeleton: FC<LoadingSkeletonProps> = ({}) => {
       {[...Array(6)].map((movie, index) => (
         <li key={index} className="relative animate-pulse">
           <div className="aspect-video w-full h-[300px] overflow-hidden rounded-lg bg-foreground/25"></div>
-          <p className="mt-2 h-4 w-1/2 rounded-lg bg-foreground/15"></p>
-          <p className="mt-2 block h-4 rounded-lg bg-foreground/15 text-sm font-medium"></p>
-          <p className="mt-2 block h-4 rounded-lg bg-foreground/15 text-sm font-medium"></p>
         </li>
       ))}
     </ul>
