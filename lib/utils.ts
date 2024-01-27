@@ -60,3 +60,12 @@ export const capitalizeString = (str: string) => {
 
   return str[0].toUpperCase() + str.slice(1);
 };
+
+export const createSearchParamsURL = (
+  params: Record<string, string | string[]>
+) => {
+  const flattenedSearchParams = Object.entries(params).flatMap(([key, value]) =>
+    Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]]
+  );
+  return new URLSearchParams(flattenedSearchParams);
+};

@@ -1,8 +1,5 @@
-import {
-  bikeTypesOptions,
-  rideTypesOptions,
-} from '@/app/(protected)/_components/createForm/InfoStep';
 import * as z from 'zod';
+import { bikeTypesOptions, rideTypesOptions } from '../inputsOptions';
 
 const requiredString = z.string().min(1, 'This field is required.');
 
