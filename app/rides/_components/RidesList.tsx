@@ -151,7 +151,7 @@ const RidesList: FC<RidesListProps> = async ({ params }) => {
               </p>
               <p className="flex space-x-2">
                 <Route />
-                <span>{capitalizeString(ride.distance)} km</span>
+                <span>{capitalizeString(String(ride.distance))} km</span>
               </p>
             </div>
             <div className="p-4 w-full">

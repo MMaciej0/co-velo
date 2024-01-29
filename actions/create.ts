@@ -85,7 +85,7 @@ export const createRide = async (
       bikeType,
       route,
       description: description?.trim(),
-      distance,
+      distance: Number(distance),
       pace,
       startingPointLat: Number(startingPointLat),
       StartingPointLon: Number(startingPointLon),
