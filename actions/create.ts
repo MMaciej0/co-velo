@@ -88,7 +88,7 @@ export const createRide = async (
       distance: Number(distance),
       pace,
       startingPointLat: Number(startingPointLat),
-      StartingPointLon: Number(startingPointLon),
+      startingPointLon: Number(startingPointLon),
       ownerId: currentUser.id,
     },
   });

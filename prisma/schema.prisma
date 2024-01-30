@@ -54,7 +54,7 @@ model Listing {
   departureTime            String
   startingPointDescription String
   startingPointLat         Float
-  StartingPointLon         Float
+  startingPointLon         Float
   bikeType                 String
   rideType                 String
   pace                     String?

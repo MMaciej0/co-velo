@@ -61,7 +61,7 @@ const Filters: FC<FiltersProps> = ({}) => {
     <div className="md:grid md:grid-cols-5 md:gap-x-2">
       <div className="md:col-span-2">
         <MultiSelect
-          listData={[...rideTypesOptions]}
+          listData={rideTypesOptions}
           selected={rideType}
           setSelected={setRideType}
           placeholder="Select ride type..."
@@ -69,7 +69,7 @@ const Filters: FC<FiltersProps> = ({}) => {
       </div>
       <div className="md:col-span-2">
         <MultiSelect
-          listData={[...bikeTypesOptions]}
+          listData={bikeTypesOptions}
           selected={bikeType}
           setSelected={setBikeType}
           placeholder="Select bike type..."
@@ -82,7 +82,7 @@ const Filters: FC<FiltersProps> = ({}) => {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {[...sortOptions].map((option) => (
+              {sortOptions.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>

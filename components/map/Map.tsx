@@ -33,7 +33,7 @@ const Map: FC<MapProps> = ({ lat, lon, setNewCoords, className }) => {
       center={[lat, lon]}
       zoom={16}
       scrollWheelZoom={false}
-      className={cn('min-h-[40vh] w-full rounded-md z-0', className)}
+      className={cn('min-h-[40vh] w-full z-0', className)}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
