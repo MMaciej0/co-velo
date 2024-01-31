@@ -1,17 +1,20 @@
-import React, { Suspense, cache } from 'react';
+import React, { cache } from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
+import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
-import { capitalizeString, cn } from '@/lib/utils';
+import { capitalizeString, cn, getCurrentUser } from '@/lib/utils';
 
+import { User as UserIcon } from 'lucide-react';
+import Participants from '@/app/rides/[slug]/_components/Participants';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import StartingPointMap from './_components/StartingPointMap';
+import StartingPointMap from '@/app/rides/[slug]/_components/StartingPointMap';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
-import { User } from 'lucide-react';
 import CopyToClipboard from '@/components/CopyToClipboard';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 interface SingleRidePageProps {
   params: {
@@ -20,11 +23,30 @@ interface SingleRidePageProps {
 }
 
 const getRide = cache(async (slug: string) => {
-  const ride = await prisma.listing.findUnique({ where: { slug } });
+  const ride = await prisma.listing.findUnique({
+    where: { slug },
+    include: {
+      participants: {
+        include: {
+          user: {
+            select: {
+              name: true,
+              image: true,
+              id: true,
+            },
+          },
+        },
+      },
+      owner: true,
+    },
+  });
 
   if (!ride) return notFound();
 
-  return ride;
+  return {
+    ...ride,
+    participants: ride.participants.map((participant) => participant.user),
+  };
 });
 
 export const generateMetadata = async ({
@@ -38,6 +60,11 @@ export const generateMetadata = async ({
 };
 
 const SingleRidePage = async ({ params: { slug } }: SingleRidePageProps) => {
+  const [ride, currentUser] = await Promise.all([
+    getRide(slug),
+    getCurrentUser(),
+  ]);
+
   const {
     departureDate,
     departureTime,
@@ -46,14 +73,16 @@ const SingleRidePage = async ({ params: { slug } }: SingleRidePageProps) => {
     distance,
     title,
     description,
-    ownerId,
     pace,
     route,
     startingPointDescription,
     startingPointLat,
     startingPointLon,
-  } = await getRide(slug);
-  const owner = await prisma.user.findUnique({ where: { id: ownerId } });
+    owner,
+    participants,
+    id,
+  } = ride;
+
   return (
     <MaxWidthWrapper className="pt-20">
       <header className="text-center py-8">
@@ -132,7 +161,7 @@ const SingleRidePage = async ({ params: { slug } }: SingleRidePageProps) => {
               >
                 <AvatarImage src={owner?.image || ''} />
                 <AvatarFallback className="bg-transparent">
-                  <User />
+                  <UserIcon />
                 </AvatarFallback>
               </Avatar>
             </p>
@@ -140,7 +169,7 @@ const SingleRidePage = async ({ params: { slug } }: SingleRidePageProps) => {
               <CopyToClipboard
                 label="Route"
                 text={route}
-                labelStyle="font-bold text-primary dark:text-primary-foreground"
+                labelStyle="font-bold text-base text-primary dark:text-primary-foreground"
               />
             )}
           </article>
@@ -159,9 +188,44 @@ const SingleRidePage = async ({ params: { slug } }: SingleRidePageProps) => {
           </div>
         </section>
         <Separator />
+        <section className="py-10 px-2 md:px-10 md:grid md:grid-cols-2 md:justify-items-center md:place-items-center md:gap-x-6">
+          <h2 className="text-center py-4 text-2xl text-primary dark:text-primary-foreground font-bold md:text-start">
+            {!currentUser &&
+              'Please log in first, to participate in this ride.'}
+            {currentUser &&
+              participants.length === 0 &&
+              'Be the first and sign up for this ride'}
+            {currentUser && participants.length > 0 && 'Already on board:'}
+          </h2>
+          {!currentUser ? (
+            <div className="my-8 md:my-0 flex justify-center w-full">
+              <Link
+                href="/login"
+                className={cn(
+                  buttonVariants({
+                    variant: 'default',
+                    className: 'w-full max-w-[300px]',
+                  })
+                )}
+              >
+                Sign in
+              </Link>
+            </div>
+          ) : (
+            <div
+              className={cn(
+                currentUser && participants.length > 0 && 'col-span-2',
+                'w-full'
+              )}
+            >
+              <Participants ride={ride} currentUser={currentUser} />
+            </div>
+          )}
+        </section>
       </div>
     </MaxWidthWrapper>
   );
 };
+1;
 
 export default SingleRidePage;

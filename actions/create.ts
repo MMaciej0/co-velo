@@ -2,19 +2,19 @@
 
 import prisma from '@/lib/prisma';
 import { getCurrentUser, toSlug } from '@/lib/utils';
-import {
-  TCreateSchema,
-  createSchema,
-} from '@/lib/validators/rideLocationSchema';
+import { TCreateSchema } from '@/lib/validators/rideLocationSchema';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-interface CreateRideReturn {
-  error: string;
-}
+type CreateReturn =
+  | {
+      error?: string;
+    }
+  | undefined;
 
 export const createRide = async (
   data: TCreateSchema
-): Promise<CreateRideReturn | undefined> => {
+): Promise<CreateReturn> => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -103,4 +103,45 @@ export const createRide = async (
   });
 
   redirect(`/rides/${updatedRide.slug}`);
+};
+
+export const toggleParticipant = async (
+  listingId: string,
+  userId: string,
+  signedIn: boolean
+): Promise<CreateReturn> => {
+  if (typeof listingId !== 'string' || typeof userId !== 'string') {
+    return {
+      error: 'Please try again later.',
+    };
+  }
+
+  let action;
+  const data = {
+    listingId,
+    userId,
+  };
+
+  try {
+    if (signedIn) {
+      action = await prisma.participant.deleteMany({ where: { ...data } });
+    } else {
+      action = await prisma.participant.create({ data });
+    }
+
+    if (!action) {
+      return {
+        error: 'Operation failed. Please try again later.',
+      };
+    }
+
+    revalidatePath('/rides/[slug]', 'page');
+
+    return {}; // Success
+  } catch (error) {
+    console.error('Error during Prisma query:', error);
+    return {
+      error: 'Please try again later.',
+    };
+  }
 };
