@@ -86,7 +86,10 @@ const RidesList: FC<RidesListProps> = async ({ params }) => {
     street?: string;
     rideType?: string | { in: string[] };
     bikeType?: string | { in: string[] };
-  } = { country, city, street };
+    departureDate?: {
+      gte: Date;
+    };
+  } = { country, city, street, departureDate: { gte: new Date() } };
 
   if (typeof rideType === 'string') {
     where.rideType = rideType;
