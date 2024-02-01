@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { getCountries } from '@/actions/startingPoint';
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
