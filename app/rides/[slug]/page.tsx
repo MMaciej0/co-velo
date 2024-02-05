@@ -4,7 +4,12 @@ import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
-import { capitalizeString, cn, getCurrentUser } from '@/lib/utils';
+import {
+  capitalizeString,
+  cn,
+  createSearchParamsURL,
+  getCurrentUser,
+} from '@/lib/utils';
 
 import { User as UserIcon } from 'lucide-react';
 import Participants from '@/app/rides/[slug]/_components/Participants';
@@ -200,7 +205,10 @@ const SingleRidePage = async ({ params: { slug } }: SingleRidePageProps) => {
           {!currentUser ? (
             <div className="my-8 md:my-0 flex justify-center w-full">
               <Link
-                href="/login"
+                href={{
+                  pathname: '/login',
+                  query: { redirect: `/rides/${slug}` },
+                }}
                 className={cn(
                   buttonVariants({
                     variant: 'default',

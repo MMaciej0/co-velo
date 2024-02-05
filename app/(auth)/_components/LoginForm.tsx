@@ -25,7 +25,11 @@ import Heading from '@/components/Heading';
 import { login } from '@/actions/login';
 import FormError from '@/components/FormMessage';
 
-const LoginForm = () => {
+interface LoginFormProps {
+  redirect?: string;
+}
+
+const LoginForm = ({ redirect }: LoginFormProps) => {
   const [isPending, startTransition] = useTransition();
   const [submitError, setSubmitError] = useState<string | undefined>('');
   const form = useForm<TLoginSchema>({
@@ -39,7 +43,7 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<TLoginSchema> = (data) => {
     setSubmitError('');
     startTransition(() => {
-      login(data).then((callback) => {
+      login(data, redirect).then((callback) => {
         if (callback?.error) {
           setSubmitError(callback.error);
         }

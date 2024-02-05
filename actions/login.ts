@@ -5,7 +5,7 @@ import { signIn } from '@/auth';
 import { TLoginSchema, loginSchema } from '@/lib/validators/loginSchema';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
-export const login = async (credentials: TLoginSchema) => {
+export const login = async (credentials: TLoginSchema, redirect?: string) => {
   const validatedCredentials = loginSchema.safeParse(credentials);
 
   if (!validatedCredentials.success) {
@@ -18,7 +18,7 @@ export const login = async (credentials: TLoginSchema) => {
     await signIn('credentials', {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: redirect || DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
     if (error instanceof AuthError) {

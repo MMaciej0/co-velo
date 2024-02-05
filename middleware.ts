@@ -6,6 +6,7 @@ import {
   authRoutes,
   publicRoutes,
 } from '@/routes';
+import { createSearchParamsURL } from './lib/utils';
 
 const { auth } = NextAuth(authConfig);
 
@@ -32,7 +33,17 @@ export default auth((req) => {
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL('/login', nextUrl));
+    const currentSearchParams = Object.fromEntries(
+      nextUrl.searchParams.entries()
+    );
+    const params = {
+      redirect: nextUrl.pathname,
+      ...currentSearchParams,
+    };
+
+    const newSearchParams = createSearchParamsURL(params);
+
+    return Response.redirect(new URL(`/login?${newSearchParams}`, nextUrl));
   }
 
   return null;
