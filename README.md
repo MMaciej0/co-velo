@@ -35,10 +35,10 @@ In a world abundant with cycling applications tailored for training tracking, ro
 The primary objective of this application is to facilitate the discovery and organization of cycling rides on a global scale.
 
 Key Features:
-*user registration and authentication for secure access,
-*search functionality to discover existing rides, with filtering options based on various criteria,
-*ability for users to sign up for available rides,
-*creation of new rides, empowering users to initiate and organize cycling events seamlessly.
+- user registration and authentication for secure access,
+- search functionality to discover existing rides, with filtering options based on various criteria,
+- ability for users to sign up for available rides,
+- creation of new rides, empowering users to initiate and organize cycling events seamlessly.
 
 
 ## Built With
