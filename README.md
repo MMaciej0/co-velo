@@ -6,7 +6,7 @@
     An application that bringing together cycling enthusiasts. It allows users to easily organize bicycle trips around the world.
     <br/>
     <br/>
-    <a href="https://github.com/MMaciej0/co-velo">View Demo</a>
+    <a href="https://co-velo.vercel.app">View Demo</a>
     .
     <a href="https://github.com/MMaciej0/co-velo/issues">Report Bug</a>
     .
