@@ -26,7 +26,7 @@
 * [Contributing](#contributing)
 * [License](#license)
 * [Authors](#authors)
-* [Acknowledgements](#acknowledgements)
+* [Working on](#workingon)
 
 ## About The Project
 
@@ -121,3 +121,10 @@ Distributed under the MIT License. See [LICENSE](https://github.com/MMaciej0/co-
 ## Authors
 
 * **Maciej Mądry** - ** - [Maciej Mądry](https://github.com/MMaciej0) - **
+
+## Working on
+
+- Implementing user profile panel.
+- Developing admin dashboard.
+- Optimizing loading times.
+- ...and many more :)
