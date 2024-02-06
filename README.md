@@ -87,11 +87,13 @@ npm install
 ```
 
 4. Create .env file in root folder
+```sh
 DATABASE_URL= Your MongoDB Connection String
 AUTH_SECRET= Your Authentication Secret [Auth.js](https://authjs.dev/)
 AUTH_GOOGLE_ID= Your Google Console Project ID
 AUTH_GOOGLE_SECRET= Your Google Console Project Secret
 COUNTRIES_API_KEY=[https://countrystatecity.in/link](https://countrystatecity.in/link)
+```
 
 
 ## Roadmap
