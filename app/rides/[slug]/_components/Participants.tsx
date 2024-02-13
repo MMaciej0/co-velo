@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useMemo, useOptimistic } from 'react';
+import React, { FC, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { type User } from 'next-auth';
 import { Prisma } from '@prisma/client';
@@ -37,29 +37,6 @@ interface ParticipantsProps {
   currentUser: User;
 }
 
-const reducer = (
-  state: User[],
-  action: {
-    type: 'TOGGLE';
-    payload: { newParticipant: User; signedIn: boolean };
-  }
-) => {
-  switch (action.type) {
-    case 'TOGGLE':
-      if (action.payload.signedIn) {
-        return state.filter(
-          (parcitipant) => parcitipant.id !== action.payload.newParticipant.id
-        );
-      } else {
-        return [...state, action.payload.newParticipant];
-      }
-    default:
-      throw new Error('Ride single page user button reducer error');
-  }
-};
-
-// create reducer function to update add participant optimisticaly, or remove it if already exists, add pending effect
-
 const Participants: FC<ParticipantsProps> = ({ ride, currentUser }) => {
   const { participants, owner, id } = ride;
   const { toast } = useToast();
@@ -70,17 +47,7 @@ const Participants: FC<ParticipantsProps> = ({ ride, currentUser }) => {
 
   const isOwner = currentUser.id === owner.id;
 
-  const [optimisticParticipants, dispatch] = useOptimistic(
-    participants,
-    reducer
-  );
-
   const handleSignUp = () => {
-    dispatch({
-      type: 'TOGGLE',
-      payload: { newParticipant: currentUser, signedIn: alreadySignedIn },
-    });
-
     toggleParticipant(id, currentUser.id, alreadySignedIn).then((callback) => {
       if (callback?.error) {
         toast({
@@ -94,7 +61,7 @@ const Participants: FC<ParticipantsProps> = ({ ride, currentUser }) => {
 
   return (
     <div className="flex flex-col">
-      {optimisticParticipants.length > 0 && (
+      {participants.length > 0 && (
         <Carousel className="w-full my-4">
           <CarouselContent className="my-6">
             {participants.map(({ id, name, image }) => (
